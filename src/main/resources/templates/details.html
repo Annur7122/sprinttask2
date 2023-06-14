@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="main_layout.html">
+<div layout:fragment="siteContent">
+
+    <div class="row">
+        <div class="col-8 mx-auto">
+            <div  style="margin-left:30%; color:red" th:if="${request.handled == false}"><h3>Новая необработанная заявка</h3></div>
+
+            <form action="/addreq" method="post" th:if="${request != null}">
+                <input type="hidden" name="id" th:value="${request.id}">
+                <div class = "row">
+                    <div class="col-12">
+                        <label>ФИО: </label>
+                    </div>
+                </div>
+                <div class = "row mt-2">
+                    <div class="col-12">
+                        <input  type="text" th:value="${request.getUserName()}" class="form-control" name="userName" placeholder="ФИО" readonly>
+                    </div>
+                </div>
+                <div class = "row mt-3">
+                    <div class="col-12">
+                        <label>Курс: </label>
+                    </div>
+                </div>
+                <div class = "row mt-2">
+                    <div class="col-12">
+                        <input th:value="${request.getCourseName()}"   type="text" class="form-control" name="courseName"  readonly>
+                    </div>
+                </div>
+                <div class = "row mt-3">
+                    <div class="col-12">
+                        <label>Телефон: </label>
+                    </div>
+                </div>
+                <div class = "row mt-2">
+                    <div class="col-12">
+                        <input th:value="${request.getPhone()}" class="form-control" name="phone"  readonly>
+                    </div>
+                </div>
+                <div class = "row mt-3">
+                    <div class="col-12">
+                        <label>Комментарий: </label>
+                    </div>
+                </div>
+                <div class = "row mt-2">
+                    <div class="col-12">
+                        <textarea th:text="${request.getCommentary()}" class="form-control" name="commentary" placeholder="Комментарий" rows="3" readonly></textarea>
+                    </div>
+                </div>
+                <input style="visibility: hidden" name="handled" value="true">
+                <div class = "row mt-3">
+                    <div class="col-12">
+                        <button th:if="${request.handled==false}" class="btn btn-success">Обработать заявку</button>
+                        <button type="button" class="btn btn-danger ms-2" data-bs-toggle="modal" data-bs-target="#deleteModal">Удалить</button>
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" th:if="${request!=null}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form th:action="@{/delete-music}" method="post">
+                            <input type="hidden" name="id" th:value="${request.getId()}">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirm delete</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h3 class="text-center">ARE YOU SURE?</h3>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
+                                <button class="btn btn-danger">YES</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${request == null}"><h1>REQUEST NOT FOUND</h1></div>
+        </div>
+    </div>
+
+</div>
+
+</html>
